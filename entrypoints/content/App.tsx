@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Prompt from "./components/Prompt";
 import ActionType, { RecieveMsgInterface } from "../types";
@@ -13,7 +13,6 @@ export default () => {
   const [linkedInInput, setLinkedInInput] = useState<Element | null>(null);
 
   const domLoaded = () => {
-    console.log("Dom loaded");
     browser.runtime.sendMessage({
       type: ActionType.ContentReady,
     });
@@ -38,7 +37,7 @@ export default () => {
     };
   }, []);
 
-  // Use MutationObserver to detect when LinkedIn input is added to the DOM
+  // Use MutationObserver to detect when LinkedIn input is added to the DOM.
   useEffect(() => {
     if (isContentLoaded) {
       const observer = new MutationObserver(() => {
@@ -50,7 +49,6 @@ export default () => {
 
           setLinkedInInput(contentEditableElement);
           setParentElem(parentElem);
-          observer.disconnect();
         }
       });
 
@@ -68,7 +66,13 @@ export default () => {
       const contentEditableElement = linkedInInput as HTMLElement;
 
       const handleFocus = () => setIsFocused(true);
-      const handleBlur = () => setIsFocused(false);
+      const handleBlur = (e: FocusEvent) => {
+        // To make sure that the magic icon is not removed when the user clicks on the magic icon.
+        if (e.relatedTarget && (e.relatedTarget as HTMLElement).classList.contains("magic-stick-icon")) {
+          return;
+        }
+        setIsFocused(false);
+      };
 
       contentEditableElement.addEventListener("focus", handleFocus);
       contentEditableElement.addEventListener("blur", handleBlur);
@@ -80,12 +84,18 @@ export default () => {
     }
   }, [linkedInInput]);
 
+  const handleMagicIconClick = () => {
+    setPromptOpen(true);
+    setIsFocused(false);
+  };
+
   if (!isContentLoaded || !parentElem) {
     return null;
   }
 
   return (
     <>
+      {/* Used React createPortal to insert the magic icon in the linkdin element, so positioning is correct */}
       {parentElem && isFocused
         ? createPortal(
             <div className="absolute z-50" style={{ bottom: "0px", right: "5px" }}>
@@ -93,10 +103,9 @@ export default () => {
                 <img
                   src={magicSvg}
                   alt="magic-stick"
-                  onClick={() => {
-                    setPromptOpen(true);
-                  }}
-                  className="cursor-pointer w-6 h-6"
+                  onClick={handleMagicIconClick}
+                  className="cursor-pointer w-6 h-6 magic-stick-icon"
+                  tabIndex={0}
                 />
               </div>
             </div>,

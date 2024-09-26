@@ -4,7 +4,7 @@ import App from "./App.tsx";
 import "./style.css";
 
 export default defineContentScript({
-  matches: ["*://*.linkedin.com/messaging/*"], // TODO: Will change this to linkedin.com
+  matches: ["*://*.linkedin.com/messaging/*"],
   cssInjectionMode: "ui",
   async main(ctx) {
     const ui = await createShadowRootUi(ctx, {

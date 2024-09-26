@@ -72,7 +72,7 @@ const Prompt = ({ setPromptOpen }: Props) => {
   };
 
   return (
-    <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-[#00000033]">
+    <div className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-[#00000042]">
       <div ref={modalRef} className="w-[570px] rounded-[10px] bg-[#f9fafb] p-[20px] shadow-md">
         <div className="flex flex-col max-h-[500px] overflow-y-auto">
           {chatWithAi.map((chat) => (

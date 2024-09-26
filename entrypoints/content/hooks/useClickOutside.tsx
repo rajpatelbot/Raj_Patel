@@ -6,6 +6,7 @@ export const useClickOutside = (
 ) => {
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent) => {
+      // composed-path is used to check that the clicked element is existed into the dom or not. This will prevent to close the popup while clicking on the popup itself.
       const path = event.composedPath();
       if (ref.current && path.includes(ref.current)) {
         return;
