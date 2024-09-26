@@ -15,7 +15,7 @@ const Prompt = ({ setPromptOpen }: Props) => {
   const [propmtVal, setPropmtVal] = React.useState<string>("");
   const [chatWithAi, setChatWithAi] = React.useState<IChatWithAI[]>([]);
 
-  // useClickOutside(modalRef, () => setPromptOpen(false));
+  useClickOutside(modalRef, () => setPromptOpen(false));
 
   const handleGenerateClick = () => {
     if (propmtVal) {

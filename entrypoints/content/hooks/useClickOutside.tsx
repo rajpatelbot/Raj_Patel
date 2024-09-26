@@ -6,11 +6,12 @@ export const useClickOutside = (
 ) => {
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent) => {
-      console.log("click");
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        console.log("outside click detected");
-        handler(event);
+      const path = event.composedPath();
+      if (ref.current && path.includes(ref.current)) {
+        return;
       }
+
+      handler(event);
     };
 
     document.addEventListener("mousedown", listener);
